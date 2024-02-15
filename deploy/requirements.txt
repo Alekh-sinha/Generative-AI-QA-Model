@@ -1,0 +1,14 @@
+sentencepiece==0.1.99
+sentence_transformers
+langchain
+chromadb==0.4.14
+sentence_transformers
+transformers
+accelerate
+pypdf
+requests
+pandas
+lxml
+beautifulsoup4
+google-cloud-storage
+google-cloud

@@ -1,0 +1,41 @@
+ steps:
+    - name: 'python:3.10.12'
+      entrypoint: 'python'
+      args: ['-m', 'pip', 'install', '--upgrade', 'pip']
+    - name: 'python:3.10.12'
+      entrypoint: 'python'
+      args: ['-m', 'pip', 'install','-r','deploy/requirements.txt','--user']
+    - name: 'python:3.10.12'
+      entrypoint: python
+      args: ['web_extraction.py']
+    - name: 'gcr.io/cloud-builders/gsutil'
+      entrypoint: 'bash'
+      args:
+      - '-c'
+      - |
+        gsutil cp -r gs://upsc_2024/chromadb deploy/
+    - name: 'gcr.io/cloud-builders/gsutil'
+      entrypoint: 'bash'
+      args:
+      - '-c'
+      - |
+        gsutil cp -r gs://upsc_2024/latest_file/* workingdir/ 
+    - name: python:3.10.12
+      entrypoint: python
+      args: ['rag.py']
+    - name: 'gcr.io/cloud-builders/gsutil'
+      entrypoint: 'bash'
+      args:
+      - '-c'
+      - |
+        gsutil cp -r deploy/chromadb/* gs://upsc_2024/chromadb
+    - name: 'gcr.io/cloud-builders/gsutil'
+      entrypoint: 'bash'
+      args:
+      - '-c'
+      - |
+        gsutil mv gs://upsc_2024/latest_file/* gs://upsc_2024/old_file
+    - name: 'gcr.io/cloud-builders/docker'
+      args: ['build', '--tag', 'gcr.io/qualified-abode-411820/pytorch_predict_upsc_2014', './deploy']
+    - name: 'gcr.io/cloud-builders/docker'
+      args: ['push', 'gcr.io/qualified-abode-411820/pytorch_predict_upsc_2014']
