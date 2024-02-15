@@ -20,7 +20,7 @@ class cfg:
         self.epochs=1
         self.lr=1e-3
         self.bucket='upsc_2024'
-        self.GCS_STAGING = f"{gs://upsc_2024}/pipeline_root/"
+        self.GCS_STAGING = "gs://upsc_2024/pipeline_root/"
         self.MACHINE_TYPE="n1-highmem-8"
         self.REPLICA_COUNT=1
         self.TRAIN_IMAGE_URI='gcr.io/qualified-abode-411820/pytorch_training_upsc_2024'

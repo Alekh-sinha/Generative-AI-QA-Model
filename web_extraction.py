@@ -64,7 +64,7 @@ def main():
         os.mkdir('workingdir')
     except:
         print('chromadb is already present')
-    URL = "https://www.thehindu.com/"
+    URL = "https://write you own.com/"
     xpaths,page,tree=xpath_extraction(URL)
     feature_extractor = MarkupLMFeatureExtractor()
     # single example
