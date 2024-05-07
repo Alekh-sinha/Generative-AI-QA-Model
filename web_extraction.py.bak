@@ -69,7 +69,9 @@ def main():
         os.mkdir('{}/chromadb'.format(CFG.working_dir))
     except:
         print('chromadb is already present')
-    URL = 'Write your own URL'
+    base_url = "https://www.ibm.com"
+    relative_url = "/topics/large-language-models/"
+    URL = base_url + relative_url
     xpaths,page,tree=xpath_extraction(URL)
     if CFG.extract_from_all_ref_url:
       feature_extractor = MarkupLMFeatureExtractor()

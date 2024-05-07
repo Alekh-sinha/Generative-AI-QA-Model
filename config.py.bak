@@ -24,5 +24,3 @@ class cfg:
         self.REPLICA_COUNT=1
         self.TRAIN_IMAGE_URI='gcr.io/XXXXX/pytorch_training_upsc_2024'
         self.PROJECT_ID='XXXXX'
-        self.working_dir='working_dir'
-        self.extract_from_all_ref_url=False

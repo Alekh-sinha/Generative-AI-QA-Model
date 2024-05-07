@@ -45,7 +45,7 @@ class embedding:
     def __init__(self,cfg):
         self.character_splitter = RecursiveCharacterTextSplitter(separators=["\n\n", "\n", ". ", " ", ""],chunk_size=1000,chunk_overlap=0)
         self.embedding_function = SentenceTransformerEmbeddingFunction()
-        self.chroma_client = chromadb.PersistentClient(path="{}/chromadb".format(cfg.working_dir))
+        self.chroma_client = chromadb.PersistentClient(path="deploy/chromadb")
         self.token_splitter = SentenceTransformersTokenTextSplitter(chunk_overlap=0, tokens_per_chunk=cfg.tokens_per_chunk)
     def collection_update(self,cfg,text):
         self.character_split_texts = self.character_splitter.split_text(text)
@@ -60,16 +60,38 @@ class embedding:
 ""
 def embedding_generation(CFG):
     ###Supported format is csv,
+    #try:
+    #    os.mkdir('chromadb')
+    #except:
+    #    print('chromadb is already present')
+    #cmd='gsutil cp -r {}/* chromadb'.format(CFG.chroma)
+    #subprocess.run(cmd.split(' '))
+    ###########################################
+    #try:
+    #    os.mkdir(CFG.path.split('/')[-1])
+    #except:
+    #    print('{} is already present'.format(CFG.path.split('/')[-1]))
+    #cmd='gsutil cp -r {}/* {}'.format(CFG.path,CFG.path.split('/')[-1])
+    #subprocess.run(cmd.split(' '))
     file_name_path=[]
-    for root, dirs_list, files_list in os.walk(CFG.working_dir):## search for all the file in working directory
+    for root, dirs_list, files_list in os.walk('workingdir'):
         for file_name in files_list:
             if (os.path.splitext(file_name)[-1] == '.csv')|(os.path.splitext(file_name)[-1] == '.pdf'):
                 file_name_path.append(os.path.join(root, file_name))
     ##################################
-    print(file_name_path)
     text=text_extraction(file_name_path)
     emb=embedding(CFG)
     emb.collection_update(CFG,text)
+    #############################################
+    #cmd='gsutil mv {}/* {}'.format(CFG.path,CFG.old_file)
+    #subprocess.run(cmd.split(' '))
+    #########################################
+    #cmd='gsutil cp -r chromadb/* {}'.format(CFG.chroma)
+    #subprocess.run(cmd.split(' '))
+    #for i in file_name_path:
+    #    cmd='gsutuil cp {}/* {}'.format(CFG.path,CFG.old_file)
+    #    subprocess.run(cmd.split(' '))
+        #shutil.move(i,i.replace(CFG.path,CFG.old_file))
 ""
 def main(CFG):
     embedding_generation(CFG)
